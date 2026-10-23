@@ -1,0 +1,5 @@
+*.zip
+schemas/gschemas.compiled
+validation/
+__pycache__/
+*.py[cod]
