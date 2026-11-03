@@ -1,6 +1,6 @@
-# App Grid Soft
+# App Grid Extended
 
-Repositório: [mcdalbu/app-grid-soft](https://github.com/mcdalbu/app-grid-soft).
+Repositório: [mcdalbu/app-grid-extended](https://github.com/mcdalbu/app-grid-extended).
 
 Extensão simples para adicionar sombra ao desenho dos ícones na página de
 aplicativos do GNOME Shell, incluindo as miniaturas das pastas e os aplicativos
@@ -22,25 +22,25 @@ A sombra usa `icon-shadow`, seguindo o contorno do ícone.
 
 ## Instalação
 
-Baixe o pacote `app-grid-soft@local_v2.zip` na
-[versão v2](https://github.com/mcdalbu/app-grid-soft/releases/tag/v2).
+Baixe o pacote `app-grid-extended@local_v3.zip` na
+[versão v3](https://github.com/mcdalbu/app-grid-extended/releases/tag/v3).
 Na pasta do arquivo baixado:
 
 ```bash
-gnome-extensions install app-grid-soft@local_v2.zip
+gnome-extensions install app-grid-extended@local_v3.zip
 ```
 
 Encerre a sessão e entre novamente para o GNOME reconhecer a extensão nova.
 Depois ative:
 
 ```bash
-gnome-extensions enable app-grid-soft@local
+gnome-extensions enable app-grid-extended@local
 ```
 
 Para desativar:
 
 ```bash
-gnome-extensions disable app-grid-soft@local
+gnome-extensions disable app-grid-extended@local
 ```
 
 ## Ajustes
@@ -48,7 +48,7 @@ gnome-extensions disable app-grid-soft@local
 Abra as preferências pelo aplicativo **Extensões** ou execute:
 
 ```bash
-gnome-extensions prefs app-grid-soft@local
+gnome-extensions prefs app-grid-extended@local
 ```
 
 Os quatro controles são aplicados imediatamente e salvos entre sessões.
@@ -56,10 +56,10 @@ O botão **Restaurar** recupera os valores padrão do Dash to Dock Soft.
 Valores negativos deslocam a sombra para a esquerda ou para cima; desfoque zero
 produz uma sombra nítida. Opacidade zero deixa a sombra invisível.
 
-Para gerar novamente o pacote, execute `make`. Para atualizar a versão 1, use:
+Para gerar novamente o pacote, execute `make`. Para atualizar uma instalação do App Grid Extended, use:
 
 ```bash
-gnome-extensions install --force app-grid-soft@local_v2.zip
+gnome-extensions install --force app-grid-extended@local_v3.zip
 ```
 
 Encerre e reabra a sessão para carregar a nova versão. Os ajustes seguintes nas
@@ -70,10 +70,10 @@ do dock não são sincronizadas. Seu CSS se limita às grades de aplicativos.
 A folha de estilo temporária é atualizada quando os parâmetros ou o tema mudam e
 removida ao desativar a extensão. Não há timers, efeitos de blur ou alterações em
 métodos do Shell. As configurações usam o schema próprio
-`org.gnome.shell.extensions.app-grid-soft`.
+`org.gnome.shell.extensions.app-grid-extended`.
 
-Compatibilidade declarada: GNOME Shell 45–50 (módulos ESM). Validação local no
-GNOME Shell 50.6; outras versões precisam de verificação nas respectivas sessões.
+Compatibilidade declarada: GNOME Shell 45–51 (módulos ESM). Validação local no
+GNOME Shell 51.1; outras versões precisam de verificação nas respectivas sessões.
 
 ## Validação
 
@@ -85,10 +85,31 @@ make
 /usr/bin/python3 tests/headless.py
 ```
 
-A verificação de integração usa GNOME Shell 50 numa sessão Wayland e D-Bus
+A verificação de integração usa a versão instalada do GNOME Shell numa sessão Wayland e D-Bus
 isolada, com configurações temporárias. Confere alterações ao vivo, limites,
 escala, troca de tema, persistência, remoção do efeito e vínculos das preferências.
-Resultados em `validation/gnome50-results.json`. O helper que permite avaliar
+Resultados em `validation/gnome51-results.json`. O helper que permite avaliar
 código existe apenas na sessão de teste e não é incluído no ZIP.
 
 Licença: GPL-2.0-or-later; veja `COPYING`.
+
+## Migração do App Grid Soft
+
+A versão 3 passa a se chamar **App Grid Extended**, com UUID
+`app-grid-extended@local`. Antes de ativá-la, desative a instalação antiga:
+
+```bash
+gnome-extensions disable app-grid-soft@local
+gnome-extensions install app-grid-extended@local_v3.zip
+```
+
+Encerre a sessão, entre novamente e ative `app-grid-extended@local`.
+O schema passa a ser `org.gnome.shell.extensions.app-grid-extended`, mas mantém
+o caminho de armazenamento `/org/gnome/shell/extensions/app-grid-soft/` para
+preservar os quatro ajustes existentes. Não ative as duas extensões juntas.
+
+## Versão 3
+
+Renomeia o projeto, o pacote, o UUID e o schema para App Grid Extended.
+Inclui suporte declarado ao GNOME Shell 51 e validação de integração no 51.1.
+O teste lê a versão e o UUID dos metadados e verifica o pacote que será publicado.

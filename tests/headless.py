@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Verify the distributable in an isolated GNOME Shell 50 session."""
+"""Verify the distributable in an isolated GNOME Shell session."""
 import json
 import os
 from pathlib import Path
@@ -10,21 +10,25 @@ import time
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-UUID = 'app-grid-soft@local'
+METADATA = json.loads((ROOT / 'metadata.json').read_text())
+UUID = METADATA['uuid']
+VERSION = METADATA['version']
+SHELL_VERSION = subprocess.check_output(['gnome-shell', '--version'], text=True).strip().split()[-1]
+SHELL_MAJOR = SHELL_VERSION.split('.')[0]
 
 
 def stage():
-    with tempfile.TemporaryDirectory(prefix='app-grid-soft-check-', ignore_cleanup_errors=True) as temporary:
+    with tempfile.TemporaryDirectory(prefix='app-grid-extended-check-', ignore_cleanup_errors=True) as temporary:
         base = Path(temporary)
         extension = base / 'data/gnome-shell/extensions' / UUID
         extension.mkdir(parents=True)
-        with zipfile.ZipFile(ROOT / f'{UUID}_v2.zip') as archive:
+        with zipfile.ZipFile(ROOT / f'{UUID}_v{VERSION}.zip') as archive:
             archive.extractall(extension)
         helper = extension.parent / 'grid-check-helper@local'
         helper.mkdir()
         (helper / 'metadata.json').write_text(json.dumps({
             'uuid': helper.name, 'name': 'Private verification helper',
-            'description': 'Private test bus only', 'shell-version': ['50'],
+            'description': 'Private test bus only', 'shell-version': [SHELL_MAJOR],
         }))
         (helper / 'extension.js').write_text('''
 import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
@@ -64,7 +68,7 @@ def inspect():
     settings.set_string('welcome-dialog-last-shown-version', '999')
     Gio.Settings.new('org.gnome.desktop.notifications').set_boolean('show-banners', False)
     Gio.Settings.sync()
-    log = (output / 'gnome50-session.log').open('w')
+    log = (output / f'gnome{SHELL_MAJOR}-session.log').open('w')
     shell = subprocess.Popen(['gnome-shell', '--headless', '--wayland', '--no-x11',
                               '--virtual-monitor=1440x1000'], stdout=log, stderr=log)
     bus = Gio.bus_get_sync(Gio.BusType.SESSION, None)
@@ -77,7 +81,7 @@ def inspect():
             raise RuntimeError(value)
         return json.loads(value) if value else None
 
-    results = {}
+    results = {'shell-version': SHELL_VERSION}
 
     def check(name, code):
         value = evaluate(code)
@@ -88,7 +92,7 @@ def inspect():
     try:
         for _ in range(120):
             if shell.poll() is not None:
-                raise RuntimeError('Shell exited; see validation/gnome50-session.log')
+                raise RuntimeError('Shell exited; see validation session log')
             try:
                 if evaluate(f'Main.extensionManager.lookup({json.dumps(UUID)})?.state === 1'):
                     break
@@ -161,7 +165,7 @@ def inspect():
         time.sleep(.3)
         check('reset-applied-live', "soft._settings.get_int('icon-shadow-intensity')===24 && matches(grid)")
         results['passed'] = True
-        (output / 'gnome50-results.json').write_text(json.dumps(results, indent=2) + '\n')
+        (output / f'gnome{SHELL_MAJOR}-results.json').write_text(json.dumps(results, indent=2) + '\n')
         print(json.dumps(results, indent=2))
     finally:
         shell.terminate()

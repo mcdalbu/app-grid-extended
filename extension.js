@@ -3,7 +3,7 @@ import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
 import Gio from 'gi://Gio';
 import St from 'gi://St';
 
-export default class AppGridSoft extends Extension {
+export default class AppGridExtended extends Extension {
     enable() {
         this._settings = this.getSettings();
         this._context = St.ThemeContext.get_for_stage(global.stage);
@@ -43,7 +43,7 @@ export default class AppGridSoft extends Extension {
         this._updating = true;
         try {
             if (!this._file) {
-                const [file, stream] = Gio.File.new_tmp('app-grid-soft-shadow-XXXXXX');
+                const [file, stream] = Gio.File.new_tmp('app-grid-extended-shadow-XXXXXX');
                 this._file = file;
                 stream.close(null);
             }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-  <schema id="org.gnome.shell.extensions.app-grid-soft" path="/org/gnome/shell/extensions/app-grid-soft/">
+  <!-- Keep the original path so existing preferences survive the rename. -->
+  <schema id="org.gnome.shell.extensions.app-grid-extended" path="/org/gnome/shell/extensions/app-grid-soft/">
     <key name="icon-shadow-intensity" type="i">
       <default>24</default>
       <range min="0" max="100"/>

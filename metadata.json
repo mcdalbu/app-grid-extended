@@ -1,9 +1,17 @@
 {
-    "uuid": "app-grid-soft@local",
-    "name": "App Grid Soft",
-    "url": "https://github.com/mcdalbu/app-grid-soft",
-    "description": "Sombra ajustável nos ícones da grade de aplicativos e das pastas, com os mesmos parâmetros do Dash to Dock Soft.",
-    "shell-version": ["45", "46", "47", "48", "49", "50"],
-    "version": 2,
-    "settings-schema": "org.gnome.shell.extensions.app-grid-soft"
+  "uuid": "app-grid-extended@local",
+  "name": "App Grid Extended",
+  "url": "https://github.com/mcdalbu/app-grid-extended",
+  "description": "Sombra ajustável nos ícones da grade de aplicativos e das pastas, com os mesmos parâmetros do Dash to Dock Soft.",
+  "shell-version": [
+    "45",
+    "46",
+    "47",
+    "48",
+    "49",
+    "50",
+    "51"
+  ],
+  "version": 3,
+  "settings-schema": "org.gnome.shell.extensions.app-grid-extended"
 }

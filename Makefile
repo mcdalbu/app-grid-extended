@@ -1,5 +1,5 @@
-UUID = app-grid-soft@local
-VERSION = 2
+UUID = app-grid-extended@local
+VERSION = 3
 ZIP = $(UUID)_v$(VERSION).zip
 SOURCES = metadata.json extension.js prefs.js README.md COPYING
 
